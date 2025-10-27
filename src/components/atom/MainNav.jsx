@@ -33,6 +33,22 @@ function MainNav() {
                     Data Produk
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    className="text-gray-500 transition hover:text-gray-500/75"
+                    href="/list"
+                  >
+                    Fetch List
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="text-gray-500 transition hover:text-gray-500/75"
+                    href="/detail"
+                  >
+                    Fetch Detail
+                  </Link>
+                </li>
               </ul>
             </nav>
 
