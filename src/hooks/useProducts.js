@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
-const createSlug = (nama) => {
-  return nama
+const createSlug = (title) => {
+  return title
     .toLowerCase()
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/[\s-]+/g, "-")
@@ -49,11 +49,33 @@ export const useProducts = create((set, get) => ({
     }));
   },
   updateProduct: (slug, updatedData) => {
-    set((state) => {
+    set((state) => ({
       products: state.products.map((p) => {
-        if (p.slug === slug) return p;
+        if (p.slug !== slug) return p;
+
         let finalData = { ...p, ...updatedData };
-      });
-    });
+
+        if (updatedData.nama) {
+          const newSlug = createSlug(updatedData.nama);
+
+          const isSlugExists = get().products.some(
+            (prod) => prod.slug === newSlug && prod.slug !== slug
+          );
+
+          if (isSlugExists) {
+            alert(`Nama "${updatedData.nama}" sudah ada.`);
+            return p;
+          }
+          finalData.slug = newSlug;
+        }
+
+        return finalData;
+      }),
+    }));
+  },
+  deleteProduct: (slug) => {
+    set((state) => ({
+      products: state.products.filter((p) => p.slug !== slug),
+    }));
   },
 }));
