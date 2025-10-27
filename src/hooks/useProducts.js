@@ -13,12 +13,12 @@ const initialProducts = [
   },
   {
     title: "Product 3",
-    harga: 50000,
-    stok: 20,
+    harga: 60000,
+    stok: 10,
   },
   {
     title: "Product 3",
-    harga: 50000,
+    harga: 20000,
     stok: 20,
   },
 ];
