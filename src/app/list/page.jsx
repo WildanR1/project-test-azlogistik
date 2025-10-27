@@ -15,13 +15,6 @@ import {
 
 function page() {
   const [data, setData] = useState([]);
-  //   const { isPending, error, data } = useQuery({
-  //     queryKey: ["ability"],
-  //     queryFn: async () => {
-  //       const res = await api.get("/ability");
-  //       return res.data;
-  //     },
-  //   });
   useEffect(() => {
     const fetchData = async () => {
       const res = await api.get("/ability");

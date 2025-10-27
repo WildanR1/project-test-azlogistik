@@ -37,45 +37,74 @@ const initialProducts = [
 
 export const useProducts = create((set, get) => ({
   products: initialProducts,
-  addProduct: (productData) => {
-    const slug = createSlug(productData.title);
-    const isSlugExist = get().products.some((p) => p.slug === slug);
-    if (slug) {
-      alert("Error data product sudah ada");
-      return;
+  isLoading: false,
+  setLoading: (loading) => set({ isLoading: loading }),
+  addProduct: async (productData) => {
+    set({ isLoading: true });
+    try {
+      // Simulasi delay untuk melihat loading state
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      const slug = createSlug(productData.title);
+      const isSlugExist = get().products.some((p) => p.slug === slug);
+      if (isSlugExist) {
+        throw new Error("Produk dengan nama yang sama sudah ada");
+      }
+      set((state) => ({
+        products: [...state.products, { ...productData, slug }],
+      }));
+    } finally {
+      set({ isLoading: false });
     }
-    set((state) => ({
-      products: [...state.products, { ...productData, slug }],
-    }));
   },
-  updateProduct: (slug, updatedData) => {
-    set((state) => ({
-      products: state.products.map((p) => {
-        if (p.slug !== slug) return p;
+  updateProduct: async (slug, updatedData) => {
+    set({ isLoading: true });
+    try {
+      // Simulasi delay untuk melihat loading state
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
-        let finalData = { ...p, ...updatedData };
+      if (updatedData.title) {
+        const newSlug = createSlug(updatedData.title);
+        const isSlugExists = get().products.some(
+          (prod) => prod.slug === newSlug && prod.slug !== slug
+        );
 
-        if (updatedData.nama) {
-          const newSlug = createSlug(updatedData.nama);
-
-          const isSlugExists = get().products.some(
-            (prod) => prod.slug === newSlug && prod.slug !== slug
+        if (isSlugExists) {
+          throw new Error(
+            `Produk dengan nama "${updatedData.title}" sudah ada`
           );
-
-          if (isSlugExists) {
-            alert(`Nama "${updatedData.nama}" sudah ada.`);
-            return p;
-          }
-          finalData.slug = newSlug;
         }
+      }
 
-        return finalData;
-      }),
-    }));
+      set((state) => ({
+        products: state.products.map((p) => {
+          if (p.slug !== slug) return p;
+
+          let finalData = { ...p, ...updatedData };
+
+          if (updatedData.title) {
+            const newSlug = createSlug(updatedData.title);
+            finalData.slug = newSlug;
+          }
+
+          return finalData;
+        }),
+      }));
+    } finally {
+      set({ isLoading: false });
+    }
   },
-  deleteProduct: (slug) => {
-    set((state) => ({
-      products: state.products.filter((p) => p.slug !== slug),
-    }));
+  deleteProduct: async (slug) => {
+    set({ isLoading: true });
+    try {
+      // Simulasi delay untuk melihat loading state
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      set((state) => ({
+        products: state.products.filter((p) => p.slug !== slug),
+      }));
+    } finally {
+      set({ isLoading: false });
+    }
   },
 }));
